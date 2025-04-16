@@ -1,0 +1,35 @@
+name: Deploy
+on:
+  push:
+    branches: [ main ]  # Runs on every push to 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Needed to push to gh-pages
+    
+    steps:
+      # 1. Checkout the repo
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for git history
+      
+      # 2. Set up Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
+      # 3. Install dependencies & build
+      - run: npm ci
+      - run: npm run docs:build
+      
+      # 4. Deploy to gh-pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}  # For private repos
+          github_token: ${{ secrets.GITHUB_TOKEN }}    # For public repos
+          publish_dir: docs/.vitepress/dist
+          keep_files: false  # Clean old files
