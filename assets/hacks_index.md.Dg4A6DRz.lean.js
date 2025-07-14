@@ -1,0 +1,1 @@
+import{_ as r,c as t,o,ae as a}from"./chunks/framework.DlG2qiMf.js";const h=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"hacks/index.md","filePath":"hacks/index.md"}'),s={name:"hacks/index.md"};function i(n,e,l,p,c,u){return o(),t("div",null,e[0]||(e[0]=[a("",12)]))}const k=r(s,[["render",i]]);export{h as __pageData,k as default};
