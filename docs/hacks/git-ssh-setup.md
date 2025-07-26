@@ -1,12 +1,12 @@
 
-# 💻 Git SSH Setup – Like a Pro
+# Git SSH Setup – Like a Pro
 
 > Securely push code without typing your password every time.
 > This guide works for GitHub, GitLab, Bitbucket, etc.
 
 ---
 
-## 🤦‍♂️ Step 0: Prerequisites
+## Step 0: Prerequisites
 
 Make sure you have:
 
@@ -22,7 +22,7 @@ Make sure you have:
 
 ---
 
-## 🧠 Step 1: Check for Existing SSH Keys
+## Step 1: Check for Existing SSH Keys
 
 ```bash
 ls -al ~/.ssh
@@ -32,7 +32,7 @@ ls -al ~/.ssh
 
 ---
 
-## 🛠 Step 2: Generate a New SSH Key
+## Step 2: Generate a New SSH Key
 
 ```bash
 ssh-keygen -t ed25519 -C "your_email@example.com"
@@ -49,7 +49,7 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 
 ---
 
-## 🧩 Step 3: Start the SSH Agent
+## Step 3: Start the SSH Agent
 
 ```bash
 eval "$(ssh-agent -s)"
@@ -59,7 +59,7 @@ eval "$(ssh-agent -s)"
 
 ---
 
-## 🔑 Step 4: Add the SSH Key to the Agent
+## Step 4: Add the SSH Key to the Agent
 
 ```bash
 ssh-add ~/.ssh/id_ed25519
@@ -69,7 +69,7 @@ ssh-add ~/.ssh/id_ed25519
 
 ---
 
-## 📋 Step 5: Copy Your Public Key
+## Step 5: Copy Your Public Key
 
 ```bash
 cat ~/.ssh/id_ed25519.pub
@@ -79,16 +79,16 @@ cat ~/.ssh/id_ed25519.pub
 
 ---
 
-## 🌐 Step 6: Add SSH Key to GitHub/GitLab
+## Step 6: Add SSH Key to GitHub/GitLab
 
 - **GitHub** → [Settings → SSH and GPG keys](https://github.com/settings/keys)
 - **GitLab** → [Profile → Preferences → SSH Keys](https://gitlab.com/-/profile/keys)
 
-> 🔐 Paste your copied key → Name it → Save
+> Paste your copied key → Name it → Save
 
 ---
 
-## ⚡ Step 7: Test the SSH Connection
+## Step 7: Test the SSH Connection
 
 ```bash
 ssh -T git@github.com
@@ -101,7 +101,7 @@ Hi username! You've successfully authenticated.
 
 ---
 
-## 🛡️ Step 7.5: Set Your Git Username and Email (Global)
+## Step 7.5: Set Your Git Username and Email (Global)
 
 Before pushing code, configure your identity:
 
@@ -114,7 +114,7 @@ git config --global user.email "your_email@example.com"
 
 ---
 
-## 🧬 Step 8: Use SSH Instead of HTTPS
+## Step 8: Use SSH Instead of HTTPS
 
 Clone using SSH:
 ```bash
@@ -128,7 +128,7 @@ git remote set-url origin git@github.com:your-username/your-repo.git
 
 ---
 
-## 🧠 Bonus: Check SSH Remote
+## Bonus: Check SSH Remote
 
 ```bash
 git remote -v
@@ -136,7 +136,7 @@ git remote -v
 
 ---
 
-## 🎉 Boom! You're now a Git SSH Hacker!
+## Boom! You're now a Git SSH Hacker!
 No more typing username/password. Clean. Fast. Secure. Hacker-style.
 
 ---

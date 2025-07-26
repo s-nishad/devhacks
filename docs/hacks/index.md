@@ -1,16 +1,16 @@
-🚀 DevHacks: Tutorials & Hacks
+DevHacks: Tutorials & Hacks
 
 Welcome to **DevHacks** — your curated hub for practical tutorials, clever hacks, and developer inspiration! Whether you're a beginner or a seasoned coder, you'll find something to level up your skills.
 
 ---
 
-🌟 Latest Tutorials
+Latest Tutorials
 
 - [Git SSH SETUP](/hacks/git-ssh-setup)
 
 ---
 
-🛠️ What You'll Find Here
+What You'll Find Here
 
 - **Step-by-step guides** for real-world problems
 - **Productivity hacks** to speed up your workflow

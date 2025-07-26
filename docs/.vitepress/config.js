@@ -51,7 +51,10 @@ export default defineConfig({
           text: 'Tutorials',
           items: [
             { text: 'PostgreSQL Cooking', link: '/hacks/postgres-setup' },
-            { text: 'Git SSH Setup', link: '/hacks/git-ssh-setup' }
+            { text: 'Git SSH Setup', link: '/hacks/git-ssh-setup' },
+            { text: 'Multi Git Setup', link: '/hacks/multi-git-setup' },
+            { text: 'WSL + Docker', link: '/hacks/wsl_docker_setup.md' },
+            { text: 'Docker CheatSheet', link: '/hacks/docker_commands.md' },
           ]
         }
       ]

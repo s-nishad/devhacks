@@ -1,10 +1,10 @@
-🚀 Welcome to DevHacks!
+Welcome to DevHacks!
 
 Unlock a world of creative coding, clever solutions, and hands-on tutorials. Whether you're a beginner or a seasoned developer, you'll find something inspiring here.
 
 ---
 <!-- 
-🌟 Featured Hacks
+Featured Hacks
 
 - **[Automate Your Workflow](/hacks/automation)**  
     Boost productivity with scripts and tools.

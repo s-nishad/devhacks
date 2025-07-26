@@ -1,24 +1,24 @@
 
-# 🐘 PostgreSQL Setup & Database Creation – Guide
+# PostgreSQL Setup & Database Creation – Guide
 
 > Get PostgreSQL up and running, create a user, database, and get hacking!
 
 ---
 
-## 🛠 Step 1: Install PostgreSQL
+## Step 1: Install PostgreSQL
 
-### 🔵 Windows:
+### Windows:
 - Download the installer: [https://www.postgresql.org/download/windows/](https://www.postgresql.org/download/windows/)
 - Use the Stack Builder to install additional tools like pgAdmin
 - Remember your **password** during install
 
-### 🔴 Linux (Debian/Ubuntu):
+### Linux (Debian/Ubuntu):
 ```bash
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 ```
 
-### 🟣 macOS (with Homebrew):
+### macOS (with Homebrew):
 ```bash
 brew install postgresql
 brew services start postgresql
@@ -26,7 +26,7 @@ brew services start postgresql
 
 ---
 
-## 🤦‍♂️ Step 2: Check PostgreSQL Status (Linux/macOS)
+## Step 2: Check PostgreSQL Status (Linux/macOS)
 
 ```bash
 sudo systemctl status postgresql
@@ -34,7 +34,7 @@ sudo systemctl status postgresql
 
 ---
 
-## 👤 Step 3: Switch to the Default 'postgres' User
+## Step 3: Switch to the Default 'postgres' User
 
 ```bash
 sudo -i -u postgres
@@ -50,7 +50,7 @@ You’re in!
 
 ---
 
-## 🧙‍♂️ Step 4: Create a New Role (User)
+##  Step 4: Create a New Role (User)
 
 Inside the `psql` prompt:
 
@@ -71,7 +71,7 @@ Exit:
 
 ---
 
-## 🛢 Step 5: Create a Database for the User
+## Step 5: Create a Database for the User
 
 Switch to your OS user shell and run:
 
@@ -87,7 +87,7 @@ CREATE DATABASE mydatabase OWNER myuser;
 
 ---
 
-## 🔗 Step 6: Connect to the DB
+## Step 6: Connect to the DB
 
 ```bash
 psql -U myuser -d mydatabase
@@ -97,7 +97,7 @@ psql -U myuser -d mydatabase
 
 ---
 
-## 🧠 Bonus Commands
+## Bonus Commands
 
 - List all users:
 ```sql
@@ -126,7 +126,7 @@ psql -U myuser -d mydatabase
 
 ---
 
-## 🧼 Cleanup (Optional)
+## Cleanup (Optional)
 
 - Drop database:
 ```sql
@@ -140,8 +140,8 @@ DROP ROLE myuser;
 
 ---
 
-## 🚀 You're now PostgreSQL-enabled!
+## You're now PostgreSQL-enabled!
 
-Secure. Reliable. SQL warrior mode: activated. 💻⚔️
+Secure. Reliable. SQL warrior mode: activated. ⚔️
 
 ---
