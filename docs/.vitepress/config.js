@@ -1,4 +1,31 @@
 import { defineConfig } from 'vitepress'
+import fs from 'fs'
+import path from 'path'
+
+
+// Helper function to capitalize words
+function capitalizeWords(str) {
+  return str
+    .split(/[-_ ]+/)          // Split by dash, underscore, or space
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
+
+
+// Helper function to generate sidebar from a folder
+function generateSidebar(dir) {
+  const dirPath = path.resolve(__dirname, '../', dir)
+  if (!fs.existsSync(dirPath)) return []
+
+  const files = fs.readdirSync(dirPath)
+    .filter(f => f.endsWith('.md') && f.toLowerCase() !== 'index.md') // Ignore index.md
+
+  return files.map(f => {
+    const name = f.replace(/\.md$/, '')
+    return { text: capitalizeWords(name), link: `/${dir}/${name}` }
+  })
+}
+
 
 export default defineConfig({
   title: 'Blog & Hacks',
@@ -46,18 +73,20 @@ export default defineConfig({
       //     ]
       //   }
       // ],
-      '/hacks/': [
-        {
-          text: 'Tutorials',
-          items: [
-            { text: 'PostgreSQL Cooking', link: '/hacks/postgres-setup' },
-            { text: 'Git SSH Setup', link: '/hacks/git-ssh-setup' },
-            { text: 'Multi Git Setup', link: '/hacks/multi-git-setup' },
-            { text: 'WSL + Docker', link: '/hacks/wsl_docker_setup.md' },
-            { text: 'Docker CheatSheet', link: '/hacks/docker_commands.md' },
-          ]
-        }
-      ]
+      // '/hacks/': [
+      //   {
+      //     text: 'Tutorials',
+      //     items: [
+      //       { text: 'PostgreSQL Cooking', link: '/hacks/postgres-setup' },
+      //       { text: 'Git SSH Setup', link: '/hacks/git-ssh-setup' },
+      //       { text: 'Multi Git Setup', link: '/hacks/multi-git-setup' },
+      //       { text: 'WSL + Docker', link: '/hacks/wsl_docker_setup.md' },
+      //       { text: 'Docker CheatSheet', link: '/hacks/docker_commands.md' },
+      //     ]
+      //   }
+      // ]
+      '/blog/': generateSidebar('blog'),
+      '/hacks/': generateSidebar('hacks')
     },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/s-nishad/devhacks' }
