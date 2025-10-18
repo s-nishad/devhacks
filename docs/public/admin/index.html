@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+    header { background: #222; color: #fff; padding: 20px; text-align: center; }
+    h1 { margin: 0; font-size: 1.8em; }
+    main { display: flex; height: calc(100vh - 80px); }
+    #editor, #preview { width: 50%; padding: 20px; overflow-y: auto; }
+    #editor { background: #fff; border-right: 1px solid #ccc; display: flex; flex-direction: column; }
+    #editor input, #editor select, #editor textarea { padding: 10px; font-size: 1em; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    #editor textarea { flex: 1; font-family: monospace; resize: none; }
+    #editor button { padding: 10px; margin-top: 5px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    #saveBtn { background: #28a745; color: #fff; }
+    #saveBtn:hover { background: #218838; }
+    #deleteBtn { background: #dc3545; color: #fff; }
+    #deleteBtn:hover { background: #c82333; }
+    #preview { background: #fafafa; border-left: 1px solid #ccc; }
+    #status { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Secret Zone</h1>
+</header>
+<main>
+  <div id="editor">
+    <select id="folderSelect">
+      <option value="blog">Blog</option>
+      <option value="hacks">Hacks</option>
+    </select>
+    <select id="fileSelect"><option value="">-- New Post --</option></select>
+    <input type="text" id="title" placeholder="Post Title" />
+    <textarea id="content" placeholder="Write your markdown here..."></textarea>
+    <button id="saveBtn">Save / Update Post</button>
+    <button id="deleteBtn">Delete Post</button>
+    <p id="status"></p>
+  </div>
+  <div id="preview">
+    <h2>Live Preview</h2>
+    <div id="previewContent"></div>
+  </div>
+</main>
+
+<script>
+const token = prompt("Enter your GitHub Personal Access Token:");
+const owner = 's-nishad';
+const repo = 'devhacks';
+
+const folderSelect = document.getElementById('folderSelect');
+const fileSelect = document.getElementById('fileSelect');
+const titleInput = document.getElementById('title');
+const contentInput = document.getElementById('content');
+const previewDiv = document.getElementById('previewContent');
+const statusDiv = document.getElementById('status');
+const saveBtn = document.getElementById('saveBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+
+// Live markdown preview
+contentInput.addEventListener('input', () => {
+  previewDiv.innerHTML = marked.parse(contentInput.value);
+});
+
+// Capitalize words
+const capitalizeWords = str =>
+  str.split(/[-_ ]+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+// Fetch markdown files from GitHub
+async function listFiles(folder) {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/docs/${folder}`, {
+      headers: { Authorization: `token ${token}` }
+    });
+    if (!res.ok) { const err = await res.json(); statusDiv.textContent=`❌ ${err.message}`; return []; }
+    const files = await res.json();
+    return Array.isArray(files) ? files.filter(f => f.type === 'file' && f.name.endsWith('.md') && f.name.toLowerCase()!=='index.md') : [];
+  } catch(err) { statusDiv.textContent=`❌ ${err.message}`; return []; }
+}
+
+// Populate file dropdown
+async function populateFiles() {
+  const folder = folderSelect.value;
+  fileSelect.innerHTML = '<option value="">-- New Post --</option>';
+  const files = await listFiles(folder);
+  files.forEach(f=>{
+    const opt = document.createElement('option');
+    opt.value = f.name;
+    opt.textContent = capitalizeWords(f.name.replace('.md','').replace(/-/g,' '));
+    fileSelect.appendChild(opt);
+  });
+}
+
+// Load selected file
+fileSelect.addEventListener('change', async () => {
+  const folder = folderSelect.value;
+  const filename = fileSelect.value;
+  if(!filename) { titleInput.value=''; contentInput.value=''; previewDiv.innerHTML=''; delete contentInput.dataset.sha; return; }
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/docs/${folder}/${filename}`, {
+    headers:{Authorization:`token ${token}`}
+  });
+  const data = await res.json();
+  titleInput.value = filename.replace(/\.md$/,'').replace(/-/g,' ');
+  contentInput.value = atob(data.content);
+  previewDiv.innerHTML = marked.parse(contentInput.value);
+  contentInput.dataset.sha = data.sha;
+});
+
+// Folder change refreshes file list
+folderSelect.addEventListener('change', populateFiles);
+
+// Save / update post
+saveBtn.addEventListener('click', async () => {
+  const folder = folderSelect.value;
+  const title = titleInput.value.trim();
+  const content = contentInput.value;
+  if(!title || !content) { statusDiv.textContent='❌ Title and content required!'; return; }
+  const filename = title.toLowerCase().replace(/\s+/g,'-')+'.md';
+  const path = `docs/${folder}/${filename}`;
+  const sha = contentInput.dataset.sha;
+  const body = { message:`${sha?'Update':'Add'} post: ${capitalizeWords(title)}`, content:btoa(unescape(encodeURIComponent(content)))};
+  if(sha) body.sha = sha;
+  try{
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+      method:'PUT',
+      headers:{Authorization:`token ${token}`,'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    const result = await res.json();
+    statusDiv.textContent = res.ok?`✅ Post saved: ${capitalizeWords(title)}`:`❌ Error: ${result.message}`;
+    if(res.ok) contentInput.dataset.sha=result.content.sha;
+    populateFiles();
+  } catch(err){ statusDiv.textContent=`❌ ${err.message}`;}
+});
+
+// Delete post
+deleteBtn.addEventListener('click', async () => {
+  const folder = folderSelect.value;
+  const title = titleInput.value.trim();
+  const sha = contentInput.dataset.sha;
+  if(!title || !sha){ statusDiv.textContent='❌ Select a post to delete!'; return; }
+  if(!confirm(`Are you sure you want to delete "${title}"?`)) return;
+  const filename = title.toLowerCase().replace(/\s+/g,'-')+'.md';
+  const path = `docs/${folder}/${filename}`;
+  try{
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+      method:'DELETE',
+      headers:{Authorization:`token ${token}`,'Content-Type':'application/json'},
+      body:JSON.stringify({message:`Delete post: ${capitalizeWords(title)}`, sha})
+    });
+    const result = await res.json();
+    statusDiv.textContent = res.ok?`✅ Post deleted: ${capitalizeWords(title)}`:`❌ Error: ${result.message}`;
+    if(res.ok){ titleInput.value=''; contentInput.value=''; previewDiv.innerHTML=''; delete contentInput.dataset.sha; populateFiles(); }
+  } catch(err){ statusDiv.textContent=`❌ ${err.message}`;}
+});
+
+// Initial load
+populateFiles();
+</script>
+</body>
+</html>
