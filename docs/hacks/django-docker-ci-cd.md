@@ -6,27 +6,6 @@ This is a **detailed, hands-on**, slightly "hacker-y" tutorial for deploying a D
 
 ---
 
-## Table of Contents
-
-1. Quick Goals
-2. Assumptions & Prerequisites
-3. Project Layout
-4. File contents (copy-ready)
-   - Dockerfile
-   - docker-compose.yml
-   - .env example
-   - .gitignore
-   - GitHub Actions: `.github/workflows/ci-cd.yml`
-5. Local dev workflow (commands)
-6. Server bootstrap (one-time)
-7. CI/CD flow explained (step-by-step)
-8. Post-deploy tasks & healthchecks
-9. Backup & rollback hacks
-10. Security & best-practices (hacker tips)
-11. Troubleshooting cheatsheet
-12. Optional add-ons (NGINX, SSL, Redis, Celery)
-
----
 
 ## 1. Quick Goals
 
