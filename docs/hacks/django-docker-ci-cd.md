@@ -6,7 +6,6 @@ This is a **detailed, hands-on**, slightly "hacker-y" tutorial for deploying a D
 
 ---
 
-
 ## 1. Quick Goals
 
 - Build and test the app in GitHub Actions.
