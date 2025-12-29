@@ -90,10 +90,10 @@ They do the **same work**, but improve **readability** in low-level code.
 
 ### Relationship to Set/Clear Bit
 
-| Operation | Traditional      | Using bis / bic        |                        |
-| --------- | ---------------- | ---------------------- | ---------------------- |
-| Set bit   | `x               | = (1 << n)`            | `x = bis(x, (1 << n))` |
-| Clear bit | `x &= ~(1 << n)` | `x = bic(x, (1 << n))` |                        |
+| Operation | Traditional      | Using bis / bic        |                        
+| --------- | ---------------- | ---------------------- | 
+| Set bit   | `x \|= (1 << n)` | `x = bis(x, (1 << n))` |
+| Clear bit | `x &= ~(1 << n)` | `x = bic(x, (1 << n))` |                        
 
 ### Example
 
