@@ -5,7 +5,7 @@
 
 ---
 
-# Architecture (Production)
+## Architecture (Production)
 
 ```
 Internet
@@ -19,7 +19,7 @@ Gunicorn + Uvicorn
 
 ---
 
-# Step 1 - EC2 Setup
+## Step 1 - EC2 Setup
 
 - Ubuntu 22.04
 - Open ports:
@@ -29,7 +29,7 @@ Gunicorn + Uvicorn
 
 ---
 
-# Step 2 - Connect
+## Step 2 - Connect
 
 ```bash
 ssh -i your-key.pem ubuntu@YOUR_IP
@@ -37,7 +37,7 @@ ssh -i your-key.pem ubuntu@YOUR_IP
 
 ---
 
-# Step 3 - Install Docker
+## Step 3 - Install Docker
 
 ```bash
 sudo apt update
@@ -51,7 +51,7 @@ Reconnect SSH.
 
 ---
 
-# Step 4 - Clone Project
+## Step 4 - Clone Project
 
 ```bash
 git clone https://github.com/your-repo.git
@@ -60,7 +60,7 @@ cd your-repo
 
 ---
 
-# Step 5 - Create .env
+## Step 5 - Create .env
 
 ```bash
 nano .env
@@ -75,7 +75,7 @@ JWT_SECRET=supersecretkey
 
 ---
 
-# Step 6 - Dockerfile
+## Step 6 - Dockerfile
 
 ```Dockerfile
 FROM python:3.12-slim
@@ -95,7 +95,7 @@ CMD ["gunicorn", "app.main:app", "-k", "uvicorn.workers.UvicornWorker", "--bind"
 
 ---
 
-# Step 7 - docker-compose.yml
+## Step 7 - docker-compose.yml
 
 ```yaml
 version: "3.9"
@@ -113,7 +113,7 @@ services:
 
 ---
 
-# Step 8 - Run App
+## Step 8 - Run App
 
 ```bash
 docker compose up -d --build
@@ -133,7 +133,7 @@ http://YOUR_IP:8000/docs
 
 ---
 
-# Step 9 - Install Nginx
+## Step 9 - Install Nginx
 
 ```bash
 sudo apt install nginx -y
@@ -141,7 +141,7 @@ sudo apt install nginx -y
 
 ---
 
-# Step 10 - Configure Nginx
+## Step 10 - Configure Nginx
 
 ```bash
 sudo nano /etc/nginx/sites-available/fastapi
@@ -181,9 +181,9 @@ http://YOUR_IP/docs
 
 ---
 
-# Step 11 - Security Hardening
+## Step 11 - Security Hardening
 
-## Firewall
+### Firewall
 
 ```bash
 sudo ufw allow OpenSSH
@@ -191,7 +191,7 @@ sudo ufw allow 80
 sudo ufw enable
 ```
 
-## Hide Nginx version
+### Hide Nginx version
 
 ```bash
 sudo nano /etc/nginx/nginx.conf
@@ -209,7 +209,7 @@ Restart:
 sudo systemctl restart nginx
 ```
 
-## Disable root login
+### Disable root login
 
 ```bash
 sudo nano /etc/ssh/sshd_config
@@ -229,22 +229,22 @@ sudo systemctl restart ssh
 
 ---
 
-# Common Issues Fix
+### Common Issues Fix
 
-## Port not accessible
+### Port not accessible
 
 ✔ Fix:
 - Check Security Group
 - Check docker ports mapping
 
-## Container running but no response
+### Container running but no response
 
 ✔ Fix:
 ```bash
 docker logs fastapi-app
 ```
 
-## Nginx not working
+### Nginx not working
 
 ✔ Fix:
 ```bash
@@ -253,21 +253,21 @@ sudo nginx -t
 
 ---
 
-# Step 12 - CI/CD (Auto Deploy)
+## Step 12 - CI/CD (Auto Deploy)
 
-## Generate key
+### Generate key
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "github-actions"
 ```
 
-## Add public key to server
+### Add public key to server
 
 ```bash
 nano ~/.ssh/authorized_keys
 ```
 
-## Add secrets in GitHub
+### Add secrets in GitHub
 
 ```
 EC2_HOST
@@ -277,7 +277,7 @@ EC2_SSH_KEY
 
 ---
 
-## GitHub Action
+### GitHub Action
 
 ```yaml
 name: Deploy
@@ -305,7 +305,7 @@ jobs:
 
 ---
 
-# Final Flow
+### Final Flow
 
 ```
 git push → GitHub Actions → EC2 → Docker rebuild → Nginx → Live API
@@ -313,7 +313,7 @@ git push → GitHub Actions → EC2 → Docker rebuild → Nginx → Live API
 
 ---
 
-# Production Checklist
+## Production Checklist
 
 - [ ] Docker running
 - [ ] Nginx reverse proxy working
@@ -324,6 +324,6 @@ git push → GitHub Actions → EC2 → Docker rebuild → Nginx → Live API
 
 ---
 
-# DONE
+### DONE
 
 Now you have a **production-ready FastAPI deployment with Docker + Nginx + CI/CD**
